@@ -1,4 +1,3 @@
-// #include<bits/stdc++.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -62,27 +61,29 @@ bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
 int32_t main(){
+    int n;cin>>n;
     vi arr;
-    looper(i,0,100){
-        arr.pb(1);
-        cout<<arr.size()<<space<<arr.capacity()<<endl;
+    looper(i,0,n){
+        int x;cin>>x;arr.pb(x);
     }   
-    vi v={1,2,3,4,5};
-    vi temp(v.begin(),v.begin()+4); //to copy upto 3rd index
-    for(int i:temp){
-        cout<<i<<space;
+    vi pre_max(n,-1),suffix_max(n,-1);
+    looper(i,0,n){
+        if(i==1){
+            pre_max[i]=arr[0];
+        }else if(i>1){
+            pre_max[i]=max(pre_max[i-1],arr[i-1]);
+        }
     }
-    cout<<endl;
-    v.insert(v.begin(),99);
-    v.insert(v.begin()+2,69);// assign to 3rd index
-    for(int i:v){
-        cout<<i<<space;
+    for(int i=n-2;i>=0;i--){
+        if(i==n-2){
+            suffix_max[i]=arr[n-1];
+        }else if(i<n-2){
+            suffix_max[i]=max(suffix_max[i+1],arr[i+1]);
+        }
     }
-    cout<<endl;
-    //--------------------------------------------
-    v.resize(4); // it will delete if array size is ore and append 0's if size resized is greater 
-    for(int i:v){
-        cout<<i<<space;
+    looper(i,0,n){
+        int ans= max(pre_max[i],suffix_max[i]);
+        cout<<ans<<space;
     }
     return 0;
 }

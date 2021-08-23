@@ -1,4 +1,3 @@
-// #include<bits/stdc++.h>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -62,27 +61,28 @@ bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
 int32_t main(){
-    vi arr;
-    looper(i,0,100){
-        arr.pb(1);
-        cout<<arr.size()<<space<<arr.capacity()<<endl;
+    int n,m;cin>>n>>m;
+    vector<vi> arr1(n);
+    looper(i,0,n){
+        looper(j,0,m){
+            int x;cin>>x;
+            arr1[i].pb(x);
+        }
     }   
-    vi v={1,2,3,4,5};
-    vi temp(v.begin(),v.begin()+4); //to copy upto 3rd index
-    for(int i:temp){
-        cout<<i<<space;
+    vector<vi> arr2(n,vi(m));
+    looper(i,0,n){
+        looper(j,0,m){
+            cin>>arr2[i][j];
+        }
     }
-    cout<<endl;
-    v.insert(v.begin(),99);
-    v.insert(v.begin()+2,69);// assign to 3rd index
-    for(int i:v){
-        cout<<i<<space;
+    vector<vi> arr3;
+    looper(i,0,n){
+        vi temp;
+        looper(j,0,m){
+            int x;cin>>x;temp.pb(x);
+        }
+        arr3.pb(temp);
     }
-    cout<<endl;
-    //--------------------------------------------
-    v.resize(4); // it will delete if array size is ore and append 0's if size resized is greater 
-    for(int i:v){
-        cout<<i<<space;
-    }
+
     return 0;
 }
