@@ -1,6 +1,13 @@
-// LIFO last in first out -> basic stack note
+// FIFO first in first out 
+// first come first server 
+// applications->
+// single core processors: they do tasks in the queue , its just that time allocayed to each task at one time is very less
+// ATM queue
+// Preamptive round robing (sort of advance concept, leave it for later)
+// Flash sales of flipcart
 #include <iostream>
 #include <cstdio>
+#include <stack>
 #include <cstdlib>
 #include <algorithm>
 #include <cmath>
@@ -61,38 +68,53 @@ int nCr(int n,int r){
 bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
+// lets implement using Singly linked LL
 class node{
     public:
         int data;
         node* next;
         node(int d): data(d),next(NULL) {} //shortcut to implement constructor function
 };
-class custom_stackLL{
-    node *head;int sz;
+class custom_queueLL{
+    node *head,*tail;int sz;
     public:
-    custom_stackLL() : head(NULL),sz(0) {}
+    custom_queueLL() : head(NULL),sz(0),tail(NULL) {}
     void push(int num){
-        node* newhead = new node(num);
-        newhead->next=head;
-        head=newhead;sz++;
+        node* newtail = new node(num);
+        if(!sz){
+            head=tail=newtail;
+        }else{
+            tail->next=newtail;
+            tail=newtail;
+        }
+        sz++;
     }
-    int top(){
+    int front(){
         if(sz){
             return head->data;
         }
-        cout<<"Stack Empty!"<<endl;
+        cout<<"Queue Empty!"<<endl;
+        return -1;
+    }
+    int back(){
+        if(sz){
+            return tail->data;
+        }
+        cout<<"Queue Empty!"<<endl;
         return -1;
     }
     void pop(){
         if(!sz){
-            cout<<"Stack empty!"<<endl;
+            cout<<"Queue empty!"<<endl;
             return;
+        }
+        if(sz==1){
+            tail=NULL;
         }
         node *newhead= head->next;
         delete head;
         head= newhead;
         sz--;
-
     }
     int size(){
         return sz;
@@ -105,21 +127,17 @@ class custom_stackLL{
             pop();
         }
     }
-
-
-
 };
 int32_t main(){
-    custom_stackLL s;
+    custom_queueLL q;
     looper(i,1,6){
-        s.push(i);
+        q.push(i);
     }
-    s.pop();
-    s.push(10);
-    while(!s.empty()){
-        cout<<s.top()<<space;
-        s.pop();
-    }
-
+    cout<<q.size()<<endl;
+    q.pop();
+    cout<<q.front()<<endl;
+    q.clear();
+    cout<<q.size()<<endl;
+    cout<<q.front()<<endl;
     return 0;
 }

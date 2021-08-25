@@ -1,6 +1,8 @@
-// LIFO last in first out -> basic stack note
+// implement circular queue using array
+// basically we r reusing the deleted popped elements spaces in array to push new elements there 
 #include <iostream>
 #include <cstdio>
+#include <stack>
 #include <cstdlib>
 #include <algorithm>
 #include <cmath>
@@ -61,38 +63,44 @@ int nCr(int n,int r){
 bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
-class node{
+class circular_queue_array{
+    int *arr,st,en,sz,cap;
     public:
-        int data;
-        node* next;
-        node(int d): data(d),next(NULL) {} //shortcut to implement constructor function
-};
-class custom_stackLL{
-    node *head;int sz;
-    public:
-    custom_stackLL() : head(NULL),sz(0) {}
-    void push(int num){
-        node* newhead = new node(num);
-        newhead->next=head;
-        head=newhead;sz++;
+    circular_queue_array(int d){ //how much capacity do our queue have in one go
+        cap=d;
+        arr= new int[cap];
+        st=0,en=-1,sz=0; //en is -1 so that when we ++ it, we can add element to start of array
     }
-    int top(){
-        if(sz){
-            return head->data;
+    void push(int num){
+        if(sz==cap){
+            cout<<"Queue Full!"<<endl;
+            return;
         }
-        cout<<"Stack Empty!"<<endl;
+        en = (en+1)%cap;
+        arr[en]=num;
+        sz++;
+    }
+    int front(){
+        if(sz){
+            return arr[st];
+        }
+        cout<<"Queue Empty!"<<endl;
+        return -1;
+    }
+    int back(){
+        if(sz){
+            return arr[en];
+        }
+        cout<<"Queue Empty!"<<endl;
         return -1;
     }
     void pop(){
         if(!sz){
-            cout<<"Stack empty!"<<endl;
+            cout<<"Queue empty!"<<endl;
             return;
         }
-        node *newhead= head->next;
-        delete head;
-        head= newhead;
+        st = (st+1)%cap;
         sz--;
-
     }
     int size(){
         return sz;
@@ -105,21 +113,23 @@ class custom_stackLL{
             pop();
         }
     }
-
-
-
 };
 int32_t main(){
-    custom_stackLL s;
+    circular_queue_array q(5);
     looper(i,1,6){
-        s.push(i);
+        q.push(i);
     }
-    s.pop();
-    s.push(10);
-    while(!s.empty()){
-        cout<<s.top()<<space;
-        s.pop();
-    }
+    q.push(10);
+    cout<<q.front()<<endl;
+    q.pop();
+    cout<<q.front()<<endl;
+    q.pop();
+    q.push(10);
+    cout<<q.size()<<endl;
+    cout<<q.back()<<endl;
+    q.clear();
+    cout<<q.front()<<endl;
+    cout<<q.size()<<endl;
 
     return 0;
 }
