@@ -1,4 +1,4 @@
-// given our array contains all unique values 
+// a person can watch that buildings to right which are greater than its curr building height and so on
 #include <iostream>
 #include <cstdio>
 #include <stack>
@@ -62,44 +62,42 @@ int nCr(int n,int r){
 bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
-vi get_nge(vi &arr,int n){
+int n;
+vi ans1(n); //basically nge array
+vi get_nge_thus_ans(vi &arr,int n){
     vi ans(n);
     stack<int> s;
     for(int i=n-1;i>=0;i--){
         while(s.size() && arr[s.top()]<=arr[i]){
             s.pop();
         }
-        ans[i]= s.empty() ? n : s.top();
+        ans[i]= s.empty() ? 0 : s.size();
+        ans1[i] = s.empty() ? n : s.top();
         s.push(i);   
     }
     return ans;
 }
-vi get_pge(vi &arr,int n){
-    vi ans(n);
-    stack<int> s;
-    looper(i,0,n){
-        while(s.size() && arr[s.top()]<=arr[i]){
-            s.pop();
-        }
-        ans[i]= s.empty() ? -1 : s.top();
-        s.push(i);   
-    }
-    return ans;
-}
+
 int32_t main(){
-    int n;cin>>n;
+    cin>>n;
     vi arr;
     looper(i,0,n){
-        int x;cin>>x;
-        arr.pb(x);
+        int x;cin>>x;arr.pb(x);
     }
-    vi next_greater = get_nge(arr,n);
-    vi prev_greater= get_pge(arr,n);
-    int ans=0;
-    looper(i,0,n){
-        ans+= (i - prev_greater[i])*(next_greater[i]-i)*arr[i];
-
+    vi ans = get_nge_thus_ans(arr,n);
+    //method 2
+    //by ans1 array
+    // vi result(n);
+    // for(int i=n-1;i>=0;i--){
+    //     if(ans1[i]==n){
+    //         result[i]=0;
+    //     }else{
+    //         result[i] = 1 + result[ans1[i]];
+    //     }
+    // }
+    for(int i:ans){
+        cout<<i<<space;
     }
-    cout<<ans<<endl;
+    cout<<endl;
     return 0;
 }

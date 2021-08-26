@@ -1,4 +1,7 @@
-// given our array contains all unique values 
+// given two arrays X and Y, u have to choose two indices i and j such that expression
+// abs(X[j]-X[i]) + Y[i] + Y[j] is max
+// given only X is sorted 
+//assuming i<j, given expression turns to X[j] + Y[j] + Y[i] - X[i]
 #include <iostream>
 #include <cstdio>
 #include <stack>
@@ -62,44 +65,32 @@ int nCr(int n,int r){
 bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
-vi get_nge(vi &arr,int n){
-    vi ans(n);
-    stack<int> s;
-    for(int i=n-1;i>=0;i--){
-        while(s.size() && arr[s.top()]<=arr[i]){
-            s.pop();
+//take Y as P
+pii get_ans(vi x,vi p,int n){
+    int max_diff = p[0] - x[0],max_id = 0,max_ans= INT_MIN;
+    pii ans={-1,-1};
+    looper(j,1,n){
+        int curr_sum = p[j] + x[j];
+        if(curr_sum + max_diff>max_ans){
+            max_ans= curr_sum + max_diff;ans={max_id,j};
+
         }
-        ans[i]= s.empty() ? n : s.top();
-        s.push(i);   
-    }
-    return ans;
-}
-vi get_pge(vi &arr,int n){
-    vi ans(n);
-    stack<int> s;
-    looper(i,0,n){
-        while(s.size() && arr[s.top()]<=arr[i]){
-            s.pop();
+        if(p[j]-x[j]>max_diff){
+            max_diff = p[j]-x[j];max_id=j;
         }
-        ans[i]= s.empty() ? -1 : s.top();
-        s.push(i);   
     }
     return ans;
 }
 int32_t main(){
     int n;cin>>n;
-    vi arr;
+    vi x,p;
     looper(i,0,n){
-        int x;cin>>x;
-        arr.pb(x);
+        int y;cin>>y;x.pb(y);
     }
-    vi next_greater = get_nge(arr,n);
-    vi prev_greater= get_pge(arr,n);
-    int ans=0;
     looper(i,0,n){
-        ans+= (i - prev_greater[i])*(next_greater[i]-i)*arr[i];
-
+        int y;cin>>y;p.pb(y);
     }
-    cout<<ans<<endl;
+    pii ans=get_ans(x,p,n);
+    cout<<ans.first<<space<<ans.second<<endl;
     return 0;
 }
