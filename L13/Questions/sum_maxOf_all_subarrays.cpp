@@ -1,3 +1,4 @@
+// given our array contains all unique values 
 #include <iostream>
 #include <cstdio>
 #include <stack>
@@ -61,64 +62,43 @@ int nCr(int n,int r){
 bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
+vi get_nge(vi &arr,int n){
+    vi ans(n);
+    stack<int> s;
+    for(int i=n-1;i>=0;i--){
+        while(s.size() && arr[s.top()]<=arr[i]){
+            s.pop();
+        }
+        ans[i]= s.empty() ? n : s.top();
+        s.push(i);   
+    }
+    return ans;
+}
+vi get_pge(vi &arr,int n){
+    vi ans(n);
+    stack<int> s;
+    looper(i,0,n){
+        while(s.size() && arr[s.top()]<=arr[i]){
+            s.pop();
+        }
+        ans[i]= s.empty() ? -1 : s.top();
+        s.push(i);   
+    }
+    return ans;
+}
 int32_t main(){
-    tester{
-        int n,m;cin>>n>>m;
-        vi a,b,c;
-        looper(i,0,n){
-            int x;cin>>x;
-            a.pb(x);
-        }
-        looper(i,0,n){
-            int x;cin>>x;
-            b.pb(x);
-        }
-        looper(i,0,m){
-            int x;cin>>x;
-            c.pb(x);
-        }
-        vector<vi> required_(n+1);
-        int cnt=0;
-        looper(i,0,n){
-            if(a[i]!=b[i]){
-                required_[b[i]].pb(i);cnt++;
-            }
-        }
-        int extra_paint_candidate=-1;
-        if(required_[c[n-1]].size()){
-            extra_paint_candidate= required_[c[n-1]][0];
-        }else{
-            looper(i,0,n){
-                if(b[i]==c[n-1]){
-                    extra_paint_candidate=i;
-                    break;
-                }
-            }
-        }
-        if(extra_paint_candidate==-1){
-            cout<<"NO"<<endl;
-            continue;
-        }
-        // if(required_[c[n-1]].empty()){
-        //     required_[c[n-1]].pb(extra_paint_candidate);cnt++;
-        // }
-        vi ans;
-        looper(i,0,m){
-            if(required_[c[i]].size()){
-                ans.pb(required_[c[i]].back() + 1),required_[c[i]].pop_back(),cnt--;
-            }else{
-                ans.pb(extra_paint_candidate + 1);
-            }
-        }
-        if(cnt){
-            cout<<"NO"<<endl;
-        }else{
-            cout<<"YES"<<endl;
-            for(int i:ans){
-                cout<<i<<space;
-            }
-            cout<<endl;
-        }
+    int n;cin>>n;
+    vi arr;
+    for(int &i : arr){
+        cin>>i;
     }   
+    vi next_greater = get_nge(arr,n);
+    vi prev_greater= get_pge(arr,n);
+    int ans=0;
+    looper(i,0,n){
+        ans+= (i - prev_greater[i])*(next_greater[i]-i);
+
+    }
+    cout<<ans<<endl;
     return 0;
 }
