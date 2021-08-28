@@ -1,10 +1,4 @@
-// it is of two types, max and min binary heap, in which we can insert an element and get max or del max or get min or del min resp
-// very easily 
-//Application
-//-> Priority scheduling 
-//-> order of which work to do by the GPU
-// priority queue is same as binary heap in cpp, we will implement that only 
-// we will implement s.t we can perform all three tasks in logn T.C
+// using max heap to sort in descending order , lly we can use min heap to sort in ascending order 
 #include <iostream>
 #include <cstdio>
 #include <stack>
@@ -55,8 +49,6 @@ int gCd(int a,int b){
         return a;
     return gCd(b,a%b);
 }
-// we will implement binary min heap using a vector 
-// for any node i, 2*i and 2*i+1 are its left and right children and floor(i/2) is its parent
 int fact(int n){
     int res=1;
     for(int i=2;i<=n;i++)
@@ -71,7 +63,7 @@ bool compare(pair<int,int> &one, pair<int,int> &two){
     return one.second < two.second;
 }
 class minHeap{
-    vector<int> v;
+    
     int n;
     void siftUp(int i){ // for nodes >n/2, no child of them exists actually
         while(i>1 & v[i/2]>v[i]){
@@ -101,6 +93,7 @@ class minHeap{
         }
     }
 public:
+    vector<int> v;
     minHeap(){
         v.pb(0); // to obtain 1 bases indexing
         n=0;
@@ -126,32 +119,30 @@ public:
     }
     void pop(){
         swap(v[1],v[n]); //root sent to last node
-        v.pop_back();
+        // v.pop_back(); // We didn't pop back, in this way max element will always go at bank, and then secod last and so on 
         n--;
         siftDown(1);
     }
+    void equate(vi &arr){
+        arr.clear();
+        looper(i,1,v.size()){
+            arr.pb(v[i]);
+        }
+    }
 };
 int32_t main(){
-    minHeap m(vi{6,10,1,0});
-    // m.push(5);
-    // m.push(6);
-    // m.push(10);
-    // m.push(1);
-    cout<<m.top()<<endl;
-    m.pop();
-    cout<<m.top()<<endl;
-    m.pop();
-    cout<<m.top()<<endl;
-    m.pop();
-    cout<<m.top()<<endl;
+    vi v={3,1,2,51,5,10,5};
+    int n=v.size();
+    minHeap h(v);
+    while(h.size()){
+        h.pop();
+    }
+    // looper(i,1,n+1){
+    //     cout<<h.v[i]<<space;
+    // }
+    h.equate(v);
+    for(int i:v){
+        cout<<i<<space;
+    }
     return 0;
-
-    // STL heap
-    // vi a={2,5,6,9,8};
-    // pqmax q(a.begin(),a.end()); // to build heap from a vector 
-} 
-
-// In c++ STL, priority queue can be used to enjoy binary heap functions 
-// for max heap priority_queue<int> q; and for min heap priority_queue<int,vi,greater<int> > q;
-
-// look for make_heap in func in c++ STL
+}
